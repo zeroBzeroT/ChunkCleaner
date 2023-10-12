@@ -7,10 +7,12 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"strconv"
 )
 
 func main() {
-	verbose := flag.Bool("v", false, "verbose - log everything")
+	dry := flag.Bool("dryRun", false, "Trial run that doesn't make any changes")
+	verbose := flag.Bool("v", false, "This option increases the amount of information you are given during the process")
 	mode := flag.String("mode", "perChunk", "The mode by which the inhabited time will be compared to options: \"perChunk\"/\"regionSum\"")
 	regionDir := flag.String("path", "", "The path of the directory with the .mca files that should be cleaned")
 	newPath := flag.String("newPath", "", "The path where to move the region files to")
@@ -22,7 +24,8 @@ func main() {
 	println("InhabitedMin:", *minInhabitTime)
 	println("Verbose:", *verbose)
 	println("Mode:", *mode)
-
+	println("Dry-Run:", *dry)
+	
 	if len(*newPath) != 0 && !exists(*newPath) {
 		log.Fatal("The path to move the .mca files to doesn't exist")
 		return
@@ -52,7 +55,7 @@ func main() {
 		return
 	}
 
-	err := process(*verbose, strings.EqualFold(*mode, "perChunk"), *regionDir, *newPath, int64(*minInhabitTime))
+	err := process(*dry, *verbose, strings.EqualFold(*mode, "perChunk"), *regionDir, *newPath, int64(*minInhabitTime))
 	if err != nil {
 		log.Fatal(err)
 		return
@@ -71,7 +74,7 @@ func exists(path string) bool {
 	return false
 }
 
-func process(verbose bool, perChunkMode bool, path string, newPath string, minTime int64) (err error) {
+func process(dry bool, verbose bool, perChunkMode bool, path string, newPath string, minTime int64) (err error) {
 	moveRegions := len(newPath) != 0
 
 	regions, err := filepath.Glob(path + string(os.PathSeparator) + "r.*.*.mca")
@@ -84,8 +87,12 @@ func process(verbose bool, perChunkMode bool, path string, newPath string, minTi
 		return nil
 	}
 
+	var regionIndex uint64 = 0
+
 regionLoop:
 	for _, file := range regions {
+		regionIndex++
+		
 		if verbose {
 			log.Println("Processing", file)
 		}
@@ -98,6 +105,7 @@ regionLoop:
 		}
 
 		var regionSum int64 = 0
+		var chunkMax int64 = 0
 
 		for x := 0; x < 32; x++ {
 			for z := 0; z < 32; z++ {
@@ -107,22 +115,24 @@ regionLoop:
 
 				data, err := currentRegion.ReadSector(x, z)
 				if err != nil {
-					if verbose {
-						log.Println("Couldn't read sector at x:", x, "z:", z, "from", file, "- skipping region as used..")
-					}
+					log.Println("Couldn't read sector at x:", x, "z:", z, "from", file, "- skipping region as used..")
 					continue regionLoop
 				}
 
 				var chunk Chunk
 				err = chunk.Load(data)
-				if err != nil {
+				if err != nil {					
 					log.Println("Couldn't read chunk at x:", x, "z:", z, "from", file, "- skipping region as used..")
 				}
 
 				if perChunkMode {
 					if chunk.Level.InhabitedTime > minTime {
-						log.Println("Chunk at x:", chunk.XPos, "y:", chunk.YPos, "z:", chunk.ZPos, "is", chunk.Level.InhabitedTime, "ticks old, skipping region as used..")
+						if verbose {
+							log.Println("Chunk at x:", chunk.Level.XPos, "z:", chunk.Level.ZPos, "is", chunk.Level.InhabitedTime, "ticks old, skipping region as used..")
+						}
 						continue regionLoop
+					} else if(chunk.Level.InhabitedTime > chunkMax) {
+						chunkMax = chunk.Level.InhabitedTime
 					}
 				} else {
 					regionSum += chunk.Level.InhabitedTime
@@ -136,19 +146,42 @@ regionLoop:
 			}
 		}
 
-		if verbose {
-			log.Println("Handling", file, "..")
+		var logstr string;
+
+		logstr = "[" + strconv.FormatUint(regionIndex, 10) + "/" + strconv.Itoa(len(regions)) + "] ";
+
+		if dry {
+			logstr = logstr + "Dry-Run "
+		} else if moveRegions {
+			logstr = logstr + "Moving "
+		} else {
+			logstr = logstr + "Deleting "
+		}
+		
+		info, err := os.Stat(file)
+		if err != nil {
+            log.Fatal(err)
+        }
+		
+		logstr = logstr + file
+
+		if perChunkMode {
+			log.Println(logstr, "- Max. ticks", chunkMax, "-", info.ModTime())
+		} else  {
+			log.Println(logstr, "- Cum. ticks", regionSum, "-", info.ModTime())
 		}
 
-		if moveRegions {
-			err = os.Rename(file, filepath.Join(newPath, filepath.Base(file)))
-			if err != nil && verbose {
-				log.Println("Couldn't move", file)
-			}
-		} else {
-			err = os.Remove(file)
-			if err != nil && verbose {
-				log.Println("Couldn't delete", file)
+		if !dry {
+			if moveRegions {
+				err = os.Rename(file, filepath.Join(newPath, filepath.Base(file)))
+				if err != nil && verbose {
+					log.Println("Couldn't move", file)
+				}
+			} else {
+				err = os.Remove(file)
+				if err != nil && verbose {
+					log.Println("Couldn't delete", file)
+				}
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-module github.com/SooStrator1136/chunkCleaner
+module github.com/zeroBzeroT/chunkCleaner
 
 go 1.20
 
