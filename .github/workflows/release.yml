@@ -16,7 +16,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
-          go-version: 1.20.x
+          go-version: 1.20
 
       - name: Install dependencies
         run: go get .
@@ -40,8 +40,11 @@ jobs:
           prerelease: false
 
       - name: Release
-        uses: csexton/release-asset-action@v2
+        uses: marvinpinto/action-automatic-releases@latest
         with:
-          pattern: '*.exe'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          release-url: ${{ steps.create_release.outputs.upload_url }}
+          automatic_release_tag: "${{ github.ref }}"
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            - LICENSE
+            - *.exe
