@@ -22,10 +22,14 @@ jobs:
         run: go get .
 
       - name: Build windows/amd64
-        run: GOOS=windows GOARCH=amd64 go build -o ChunkCleaner-Win64.exe -v ./...
+        run: GOOS=windows GOARCH=amd64 go build -o ChunkCleaner-Win64.exe
 
-      - name: Build linux/amd64
-        run: GOOS=linux GOARCH=amd64 go build -o ChunkCleaner-Linux64 -v ./...
+#      - name: Build linux/amd64
+#        run: GOOS=linux GOARCH=amd64 go build -o ChunkCleaner-Linux64 -v ./...
+
+      - name: Debug - List files
+        run: |
+          ls ${{ github.workspace }}
 
       - name: Release
         uses: marvinpinto/action-automatic-releases@latest
@@ -35,4 +39,4 @@ jobs:
           files: |
             - LICENSE
             - ChunkCleaner-Win64.exe
-            - ChunkCleaner-Linux64
+#            - ChunkCleaner-Linux64
