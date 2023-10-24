@@ -21,8 +21,11 @@ jobs:
       - name: Install dependencies
         run: go get .
 
-      - name: Build
-        run: go build -v ./...
+      - name: Build windows/amd64
+        run: GOOS=windows GOARCH=amd64 go build -o ChunkCleaner-Win64.exe -v ./...
+
+      - name: Build linux/amd64
+        run: GOOS=linux GOARCH=amd64 go build -o ChunkCleaner-Linux64 -v ./...
 
       - name: Release
         uses: marvinpinto/action-automatic-releases@latest
@@ -31,4 +34,5 @@ jobs:
           prerelease: false
           files: |
             - LICENSE
-            - *.exe
+            - ChunkCleaner-Win64.exe
+            - ChunkCleaner-Linux64
