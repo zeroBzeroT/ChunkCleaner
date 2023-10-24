@@ -1,4 +1,4 @@
-module github.com/zeroBzeroT/chunkCleaner
+module chunkCleaner
 
 go 1.20
 

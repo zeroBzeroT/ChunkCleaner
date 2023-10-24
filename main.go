@@ -6,8 +6,8 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 func main() {
@@ -25,7 +25,7 @@ func main() {
 	println("Verbose:", *verbose)
 	println("Mode:", *mode)
 	println("Dry-Run:", *dry)
-	
+
 	if len(*newPath) != 0 && !exists(*newPath) {
 		log.Fatal("The path to move the .mca files to doesn't exist")
 		return
@@ -92,7 +92,7 @@ func process(dry bool, verbose bool, perChunkMode bool, path string, newPath str
 regionLoop:
 	for _, file := range regions {
 		regionIndex++
-		
+
 		if verbose {
 			log.Println("Processing", file)
 		}
@@ -121,7 +121,7 @@ regionLoop:
 
 				var chunk Chunk
 				err = chunk.Load(data)
-				if err != nil {					
+				if err != nil {
 					log.Println("Couldn't read chunk at x:", x, "z:", z, "from", file, "- skipping region as used..")
 				}
 
@@ -131,7 +131,7 @@ regionLoop:
 							log.Println("Chunk at x:", chunk.Level.XPos, "z:", chunk.Level.ZPos, "is", chunk.Level.InhabitedTime, "ticks old, skipping region as used..")
 						}
 						continue regionLoop
-					} else if(chunk.Level.InhabitedTime > chunkMax) {
+					} else if chunk.Level.InhabitedTime > chunkMax {
 						chunkMax = chunk.Level.InhabitedTime
 					}
 				} else {
@@ -146,9 +146,9 @@ regionLoop:
 			}
 		}
 
-		var logstr string;
+		var logstr string
 
-		logstr = "[" + strconv.FormatUint(regionIndex, 10) + "/" + strconv.Itoa(len(regions)) + "] ";
+		logstr = "[" + strconv.FormatUint(regionIndex, 10) + "/" + strconv.Itoa(len(regions)) + "] "
 
 		if dry {
 			logstr = logstr + "Dry-Run "
@@ -157,17 +157,17 @@ regionLoop:
 		} else {
 			logstr = logstr + "Deleting "
 		}
-		
+
 		info, err := os.Stat(file)
 		if err != nil {
-            log.Fatal(err)
-        }
-		
+			log.Fatal(err)
+		}
+
 		logstr = logstr + file
 
 		if perChunkMode {
 			log.Println(logstr, "- Max. ticks", chunkMax, "-", info.ModTime())
-		} else  {
+		} else {
 			log.Println(logstr, "- Cum. ticks", regionSum, "-", info.ModTime())
 		}
 
