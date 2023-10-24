@@ -1,6 +1,9 @@
 name: Release
 
-on: push
+on:
+  push:
+    tags:
+      - "*"
 
 jobs:
   build:
@@ -20,9 +23,6 @@ jobs:
 
       - name: Build
         run: go build -v ./...
-
-      - name: Test with the Go CLI
-        run: go test
 
       - name: Release
         uses: marvinpinto/action-automatic-releases@latest
