@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - *
+      - '*'
 
 jobs:
   build:
@@ -35,7 +35,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
-          body: automated release at commit ${{ github.sha }}
+          body: 'automated release at commit ${{ github.sha }}'
           draft: false
           prerelease: false
 
