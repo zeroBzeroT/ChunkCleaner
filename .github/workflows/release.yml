@@ -24,8 +24,8 @@ jobs:
       - name: Build windows/amd64
         run: GOOS=windows GOARCH=amd64 go build -o ChunkCleaner-Win64.exe
 
-#      - name: Build linux/amd64
-#        run: GOOS=linux GOARCH=amd64 go build -o ChunkCleaner-Linux64 -v ./...
+      - name: Build linux/amd64
+        run: GOOS=linux GOARCH=amd64 go build -o ChunkCleaner-Linux64 -v ./...
 
       - name: Debug - List files
         run: |
@@ -37,6 +37,6 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
           files: |
-            - LICENSE
-            - ChunkCleaner-Win64.exe
-#            - ChunkCleaner-Linux64
+            LICENSE
+            ChunkCleaner-Win64.exe
+            ChunkCleaner-Linux64
