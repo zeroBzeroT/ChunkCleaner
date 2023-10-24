@@ -24,18 +24,6 @@ jobs:
       - name: Test with the Go CLI
         run: go test
 
-      - name: Draft
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          body: 'automated release at commit ${{ github.sha }}'
-          draft: false
-          prerelease: false
-
       - name: Release
         uses: marvinpinto/action-automatic-releases@latest
         with:
