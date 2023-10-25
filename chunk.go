@@ -13,15 +13,14 @@ import (
 )
 
 type Chunk struct {
-	// 0bOp changed for 1.12.2
 	Level struct {
 		InhabitedTime int64
-		XPos int32 `nbt:"xPos"`
-		ZPos int32 `nbt:"zPos"`
+		XPos          int32 `nbt:"xPos"`
+		ZPos          int32 `nbt:"zPos"`
 	}
-	// XPos int32 `nbt:"xPos"`
-	// YPos int32 `nbt:"yPos"`
-	// ZPos int32 `nbt:"zPos"`
+	InhabitedTime int64
+	XPos          int32 `nbt:"xPos"`
+	ZPos          int32 `nbt:"zPos"`
 }
 
 func (c *Chunk) Load(data []byte) (err error) {

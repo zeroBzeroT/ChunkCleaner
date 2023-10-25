@@ -32,7 +32,7 @@ func main() {
 	}
 
 	if len(*regionDir) == 0 {
-		log.Fatal("No path to the region files was given, see -h for flags and their usage")
+		log.Fatal("No path to the region files was given, use -h to see flags and their usage")
 		return
 	} else {
 		absPath, err := filepath.Abs(*regionDir)
@@ -125,37 +125,42 @@ regionLoop:
 					log.Println("Couldn't read chunk at x:", x, "z:", z, "from", file, "- skipping region as used..")
 				}
 
+				xPos := chunk.XPos + chunk.Level.XPos
+				zPos := chunk.ZPos + chunk.Level.ZPos
+				inhabitedTime := chunk.InhabitedTime + chunk.Level.InhabitedTime
 				if perChunkMode {
-					if chunk.Level.InhabitedTime > minTime {
+					if inhabitedTime > minTime {
 						if verbose {
-							log.Println("Chunk at x:", chunk.Level.XPos, "z:", chunk.Level.ZPos, "is", chunk.Level.InhabitedTime, "ticks old, skipping region as used..")
+							log.Println("Chunk at x:", xPos, "z:", zPos, "is", inhabitedTime, "ticks old, skipping region as used..")
 						}
+
 						continue regionLoop
-					} else if chunk.Level.InhabitedTime > chunkMax {
-						chunkMax = chunk.Level.InhabitedTime
+					} else if inhabitedTime > chunkMax {
+						chunkMax = inhabitedTime
 					}
 				} else {
-					regionSum += chunk.Level.InhabitedTime
+					regionSum += inhabitedTime
 					if regionSum > minTime {
 						if verbose {
 							log.Println(file, "has exceeded the minimum of inhabitant time, skipping region as used..")
 						}
+
 						continue regionLoop
 					}
 				}
 			}
 		}
 
-		var logstr string
+		var logStr string
 
-		logstr = "[" + strconv.FormatUint(regionIndex, 10) + "/" + strconv.Itoa(len(regions)) + "] "
+		logStr = "[" + strconv.FormatUint(regionIndex, 10) + "/" + strconv.Itoa(len(regions)) + "] "
 
 		if dry {
-			logstr = logstr + "Dry-Run "
+			logStr = logStr + "Dry-Run "
 		} else if moveRegions {
-			logstr = logstr + "Moving "
+			logStr = logStr + "Moving "
 		} else {
-			logstr = logstr + "Deleting "
+			logStr = logStr + "Deleting "
 		}
 
 		info, err := os.Stat(file)
@@ -163,12 +168,12 @@ regionLoop:
 			log.Fatal(err)
 		}
 
-		logstr = logstr + file
+		logStr = logStr + file
 
 		if perChunkMode {
-			log.Println(logstr, "- Max. ticks", chunkMax, "-", info.ModTime())
+			log.Println(logStr, "- Max. ticks", chunkMax, "-", info.ModTime())
 		} else {
-			log.Println(logstr, "- Cum. ticks", regionSum, "-", info.ModTime())
+			log.Println(logStr, "- Cum. ticks", regionSum, "-", info.ModTime())
 		}
 
 		if !dry {
