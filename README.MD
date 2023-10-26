@@ -1,5 +1,5 @@
 # ChunkCleaner
-A tool designed to automatically delete chunks or region files with low playtime, optimizing space usage and improving performance.
+A tool designed to automatically delete region files (.mca) with low playtime, optimizing space usage and improving performance.
 
 ![logo](https://github.com/zeroBzeroT/ChunkCleaner/blob/master/logo.svg?raw=true)
 
