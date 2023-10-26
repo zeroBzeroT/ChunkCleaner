@@ -20,7 +20,7 @@ In some chunks in Minecraft, the "InhabitedTime" variable does not update as exp
 | `-dryRun`            | `false`    | Trial run that doesn't make any changes                                                        |
 | `-minInhabitedTicks` | `250`      | The value that has to be passed so that a chunk will be seen as \"used\"                       |
 | `-mode`              | `perChunk` | The mode by which the inhabited time will be compared to options: \"perChunk\" / \"regionSum\" |
-| `-newPath`           |            | The path where to move the region files to (if not provides .mca files will be deleted)        |
+| `-newPath`           |            | The path where to move the region files to (if not provided .mca files will be deleted)        |
 | `-path`              |            | The path of the directory with the .mca files that should be cleaned                           |
 | `-v`                 | `false`    | This option increases the amount of information you are given during the process               |
 
