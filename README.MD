@@ -12,8 +12,12 @@ A tool designed to automatically delete region files (.mca) with low playtime, o
 ## Considerations
 In some chunks in Minecraft, the "InhabitedTime" variable does not update as expected, resulting in slower increments than anticipated. This issue has been observed in multiple versions of the game, including 1.12.2, 1.17.1 and 1.18.2. See https://bugs.mojang.com/browse/MC-127407.
 
-## Arguments
+## Example
+```sh
+ChunkCleaner-Linux64 -path /mc-srv/world_nether/DIM-1/region -newPath /mc-srv/world_nether/DIM-1/region_old -minInhabitedTicks 200
+```
 
+## Arguments
 | Argument             | Default    | Description                                                                                    |
 |----------------------|------------|------------------------------------------------------------------------------------------------|
 | `-h`                 |            | See the arguments and their usage                                                              |
@@ -25,9 +29,7 @@ In some chunks in Minecraft, the "InhabitedTime" variable does not update as exp
 | `-v`                 | `false`    | This option increases the amount of information you are given during the process               |
 
 ## TODO
-
 - Add `LightPopulated` and `TerrainPopulated` as options
 
 ## Warranty
-
 The Software is provided "as is" and without warranties of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement. In no event shall the Authors or copyright owners be liable for any claims, damages or other liability, whether in an action in contract, tort or otherwise, arising from, out of or in connection with the Software or the use or other dealings in the Software.
