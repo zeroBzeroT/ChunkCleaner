@@ -20,10 +20,14 @@ In some chunks in Minecraft, the "InhabitedTime" variable does not update as exp
 | `-dryRun`            | `false`    | Trial run that doesn't make any changes                                                        |
 | `-minInhabitedTicks` | `250`      | The value that has to be passed so that a chunk will be seen as \"used\"                       |
 | `-mode`              | `perChunk` | The mode by which the inhabited time will be compared to options: \"perChunk\" / \"regionSum\" |
-| `-newPath`           |            | The path where to move the region files to                                                     |
+| `-newPath`           |            | The path where to move the region files to (if not provides .mca files will be deleted)        |
 | `-path`              |            | The path of the directory with the .mca files that should be cleaned                           |
 | `-v`                 | `false`    | This option increases the amount of information you are given during the process               |
 
 ## TODO
 
 - Add `LightPopulated` and `TerrainPopulated` as options
+
+## Warranty
+
+The Software is provided "as is" and without warranties of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement. In no event shall the Authors or copyright owners be liable for any claims, damages or other liability, whether in an action in contract, tort or otherwise, arising from, out of or in connection with the Software or the use or other dealings in the Software.
