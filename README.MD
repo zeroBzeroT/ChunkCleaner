@@ -1,7 +1,7 @@
 # ChunkCleaner
 A tool designed to automatically delete chunks or region files with low playtime, optimizing space usage and improving performance.
 
-![logo](https://github.com/zeroBzeroT/ChunkCleaner/blob/main/logo.svg?raw=true)
+![logo](https://github.com/zeroBzeroT/ChunkCleaner/blob/master/logo.svg?raw=true)
 
 [![discord](https://img.shields.io/discord/843551077759844362?logo=discord)](https://discord.gg/7tW8ZAtGr5)
 [![reddit](https://img.shields.io/reddit/subreddit-subscribers/0b0t)](https://old.reddit.com/r/0b0t/)
