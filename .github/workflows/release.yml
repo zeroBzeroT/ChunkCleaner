@@ -22,8 +22,8 @@ jobs:
           check-latest: true
           cache: true
 
-      - name: Install dependencies
-        run: go get .
+      - name: Run linter and tests
+        run: go test -v -vet='all' ./...
 
       - name: Build windows/amd64
         run: GOOS=windows GOARCH=amd64 go build -o ChunkCleaner-Win64.exe
