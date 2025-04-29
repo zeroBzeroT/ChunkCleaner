@@ -74,13 +74,6 @@ func exists(path string) bool {
 	return false
 }
 
-func Max(x int64, y int64) int64 {
-	if x < y {
-		return y
-	}
-	return x
-}
-
 func process(dry bool, verbose bool, perChunkMode bool, path string, newPath string, minTime int64) (err error) {
 	moveRegions := len(newPath) != 0
 
@@ -134,13 +127,13 @@ regionLoop:
 
 				xPos := chunk.XPos + chunk.Level.XPos
 				zPos := chunk.ZPos + chunk.Level.ZPos
-				inhabitedTime := Max(chunk.InhabitedTime, chunk.Level.InhabitedTime)
-				
+				inhabitedTime := max(chunk.InhabitedTime, chunk.Level.InhabitedTime)
+
 				if inhabitedTime < 0 {
 					log.Println("Skipping", file, "because of an invalid or unreadable chunk at x:", xPos, "z:", zPos, "InhabitedTime =", inhabitedTime)
 					continue regionLoop
 				}
-				
+
 				if perChunkMode {
 					if inhabitedTime > minTime {
 						if verbose {
