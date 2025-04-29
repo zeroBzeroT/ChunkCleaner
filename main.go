@@ -136,7 +136,7 @@ regionLoop:
 				zPos := chunk.ZPos + chunk.Level.ZPos
 				inhabitedTime := Max(chunk.InhabitedTime, chunk.Level.InhabitedTime)
 				
-				if inhabitedTime <= 0 {
+				if inhabitedTime < 0 {
 					log.Println("Skipping", file, "because of an invalid or unreadable chunk at x:", xPos, "z:", zPos, "InhabitedTime =", inhabitedTime)
 					continue regionLoop
 				}
